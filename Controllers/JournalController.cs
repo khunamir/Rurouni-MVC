@@ -17,10 +17,33 @@ namespace Rurouni_v2.Controllers
             _db = db;
         }
 
+        // Get - Index
         public IActionResult Index()
         {
             IEnumerable<JournalModel> objList = _db.Journals;
             return View(objList);
+        }
+
+        // Get - Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // Post - Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]  // study validate anti forgery token
+        public IActionResult Create(JournalModel obj)
+        {
+            // Server side validation
+            if (ModelState.IsValid)
+            {
+                _db.Journals.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
         }
     }
 }
