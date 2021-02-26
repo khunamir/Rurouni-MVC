@@ -12,15 +12,32 @@ namespace Rurouni_v2.Controllers
     {
         private readonly JournalDbContext _db;
 
+        // Dependancy injection
         public JournalController(JournalDbContext db)
         {
             _db = db;
         }
 
         // Get - Index
-        public IActionResult Index()
+        public IActionResult Index(string sortOrder)
         {
             IEnumerable<JournalModel> objList = _db.Journals;
+
+            ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            switch (sortOrder)
+            {
+                case "Date":
+                    objList = objList.OrderBy(s => s.Date);
+                    break;
+                case "date_desc":
+                    objList = objList.OrderByDescending(s => s.Date);
+                    break;
+                default:
+                    objList = objList.OrderBy(s => s.Date);
+                    break;
+            }
+
             return View(objList);
         }
 
@@ -44,6 +61,72 @@ namespace Rurouni_v2.Controllers
             }
 
             return View(obj);
+        }
+
+        // Get - Edit
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = _db.Journals.Find(id);
+
+            if (obj == null)
+                return NotFound();
+
+            return View(obj);
+        }
+
+        // Post - Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(JournalModel obj)
+        {
+            // Server side validation
+            if (ModelState.IsValid)
+            {
+                _db.Journals.Update(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
+        }
+
+        // Get - Delete
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = _db.Journals.Find(id);
+
+            if (obj == null)
+                return NotFound();
+
+            return View(obj);
+        }
+
+        // Post - Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+
+            var obj = _db.Journals.Find(id);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            _db.Journals.Remove(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
