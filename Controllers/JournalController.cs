@@ -19,11 +19,15 @@ namespace Rurouni_v2.Controllers
         }
 
         // Get - Index
-        public IActionResult Index(string sortOrder)
+        public IActionResult Index(string sortOrder, string searchString)
         {
             IEnumerable<JournalModel> objList = _db.Journals;
 
             ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentFilter"] = searchString;
+
+            if(!String.IsNullOrEmpty(searchString))
+                objList = objList.Where(s => s.Description.Contains(searchString));
 
             switch (sortOrder)
             {
