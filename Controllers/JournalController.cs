@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Rurouni_v2.Data;
 using Rurouni_v2.Models;
 using System;
@@ -19,30 +20,51 @@ namespace Rurouni_v2.Controllers
         }
 
         // Get - Index
-        public IActionResult Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(
+    string sortOrder,
+    string currentFilter,
+    string searchString,
+    int? pageNumber)
         {
-            IEnumerable<JournalModel> objList = _db.Journals;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
-            if(!String.IsNullOrEmpty(searchString))
-                objList = objList.Where(s => s.Description.Contains(searchString));
+            var journals = from s in _db.Journals
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                journals = journals.Where(s => s.Description.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
                 case "Date":
-                    objList = objList.OrderBy(s => s.Date);
+                    journals = journals.OrderBy(s => s.Date);
                     break;
                 case "date_desc":
-                    objList = objList.OrderByDescending(s => s.Date);
+                    journals = journals.OrderByDescending(s => s.Date);
                     break;
                 default:
-                    objList = objList.OrderBy(s => s.Date);
+                    journals = journals.OrderBy(s => s.Date);
                     break;
             }
 
-            return View(objList);
+            int pageSize = 3;
+
+            return View(await PaginatedList<JournalModel>.CreateAsync(journals.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // Get - Create
@@ -54,17 +76,17 @@ namespace Rurouni_v2.Controllers
         // Post - Create
         [HttpPost]
         [ValidateAntiForgeryToken]  // study validate anti forgery token
-        public IActionResult Create(JournalModel obj)
+        public IActionResult Create(JournalModel journal)
         {
             // Server side validation
             if (ModelState.IsValid)
             {
-                _db.Journals.Add(obj);
+                _db.Journals.Add(journal);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(obj);
+            return View(journal);
         }
 
         // Get - Edit
@@ -75,28 +97,28 @@ namespace Rurouni_v2.Controllers
                 return NotFound();
             }
 
-            var obj = _db.Journals.Find(id);
+            var journal = _db.Journals.Find(id);
 
-            if (obj == null)
+            if (journal == null)
                 return NotFound();
 
-            return View(obj);
+            return View(journal);
         }
 
         // Post - Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(JournalModel obj)
+        public IActionResult Edit(JournalModel journal)
         {
             // Server side validation
             if (ModelState.IsValid)
             {
-                _db.Journals.Update(obj);
+                _db.Journals.Update(journal);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(obj);
+            return View(journal);
         }
 
         // Get - Delete
@@ -107,12 +129,12 @@ namespace Rurouni_v2.Controllers
                 return NotFound();
             }
 
-            var obj = _db.Journals.Find(id);
+            var journal = _db.Journals.Find(id);
 
-            if (obj == null)
+            if (journal == null)
                 return NotFound();
 
-            return View(obj);
+            return View(journal);
         }
 
         // Post - Delete
@@ -121,14 +143,14 @@ namespace Rurouni_v2.Controllers
         public IActionResult DeletePost(int? id)
         {
 
-            var obj = _db.Journals.Find(id);
+            var journal = _db.Journals.Find(id);
 
-            if (obj == null)
+            if (journal == null)
             {
                 return NotFound();
             }
 
-            _db.Journals.Remove(obj);
+            _db.Journals.Remove(journal);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
