@@ -9,7 +9,7 @@ using Rurouni_v2.Data;
 
 namespace Rurouni_v2.Migrations
 {
-    [DbContext(typeof(JournalDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210224062142_Add Journal to DB")]
     partial class AddJournaltoDB
     {

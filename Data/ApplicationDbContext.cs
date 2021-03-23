@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Rurouni_v2.Data
 {
-    public class JournalDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public JournalDbContext(DbContextOptions<JournalDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }

@@ -8,7 +8,7 @@ using Rurouni_v2.Data;
 
 namespace Rurouni_v2.Migrations
 {
-    [DbContext(typeof(JournalDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class JournalDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

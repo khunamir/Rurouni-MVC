@@ -11,20 +11,20 @@ namespace Rurouni_v2.Controllers
 {
     public class JournalController : Controller
     {
-        private readonly JournalDbContext _db;
+        private readonly ApplicationDbContext _db;
 
         // Dependancy injection
-        public JournalController(JournalDbContext db)
+        public JournalController(ApplicationDbContext db)
         {
             _db = db;
         }
 
         // Get - Index
         public async Task<IActionResult> Index(
-    string sortOrder,
-    string currentFilter,
-    string searchString,
-    int? pageNumber)
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
