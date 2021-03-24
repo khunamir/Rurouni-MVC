@@ -1,4 +1,3 @@
-using AspNetCoreIdentityDemo.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Rurouni_v2.Data;
+using Rurouni_v2.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -18,20 +18,15 @@ namespace Rurouni_v2.Controllers
             _userService = userService;
         }
 
-        // Get - Index
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         // Get - Register
+        [HttpGet("/Auth/Register")]
         public IActionResult Register()
         {
             return View();
         }
 
         // Post - Register
-        [HttpPost("Register")]
+        [HttpPost("/Auth/Register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -48,13 +43,14 @@ namespace Rurouni_v2.Controllers
         }
 
         // Get - Login
+        [HttpGet("/Auth/Login")]
         public IActionResult Login()
         {
             return View();
         }
 
         // Post - Login
-        [HttpPost("Login")]
+        [HttpPost("/Auth/Login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginViewModel model)
         {
             if (ModelState.IsValid)
