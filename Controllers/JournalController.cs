@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Rurouni_v2.Data;
 using Rurouni_v2.Models;
@@ -9,22 +10,23 @@ using System.Threading.Tasks;
 
 namespace Rurouni_v2.Controllers
 {
+    [Authorize]
     public class JournalController : Controller
     {
-        private readonly JournalDbContext _db;
+        private readonly ApplicationDbContext _db;
 
         // Dependancy injection
-        public JournalController(JournalDbContext db)
+        public JournalController(ApplicationDbContext db)
         {
             _db = db;
         }
 
         // Get - Index
         public async Task<IActionResult> Index(
-    string sortOrder,
-    string currentFilter,
-    string searchString,
-    int? pageNumber)
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
