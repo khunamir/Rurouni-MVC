@@ -34,7 +34,7 @@ namespace Rurouni_v2.Controllers
                 var result = await _userService.RegisterUserAsync(model);
 
                 if (result.isSuccess)
-                    return Ok(result);
+                    return RedirectToAction("Auth", "Login", result);
 
                 return BadRequest(result);
             }

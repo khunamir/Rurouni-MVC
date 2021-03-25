@@ -46,7 +46,7 @@ namespace Rurouni_v2.Services
             var IdentityUser = new IdentityUser
             {
                 Email = model.Email,
-                UserName = model.Email
+                UserName = model.Username
             };
 
             var result = await _userManager.CreateAsync(IdentityUser, model.Password);

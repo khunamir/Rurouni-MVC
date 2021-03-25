@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Rurouni_v2.Data;
 using Rurouni_v2.Models;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Rurouni_v2.Controllers
 {
+    [Authorize]
     public class JournalController : Controller
     {
         private readonly ApplicationDbContext _db;
