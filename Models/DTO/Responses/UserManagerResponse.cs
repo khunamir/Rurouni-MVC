@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCoreIdentityDemo.Shared
+namespace Rurouni_v2.Models.DTO.Responses
 {
     public class UserManagerResponse
     {

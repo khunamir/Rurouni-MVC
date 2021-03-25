@@ -27,7 +27,7 @@ namespace Rurouni_v2.Controllers
 
         // Post - Register
         [HttpPost("/Auth/Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> RegisterAsync(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -51,7 +51,7 @@ namespace Rurouni_v2.Controllers
 
         // Post - Login
         [HttpPost("/Auth/Login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginViewModel model)
+        public async Task<IActionResult> LoginAsync(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {

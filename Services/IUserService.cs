@@ -1,5 +1,4 @@
-﻿using AspNetCoreIdentityDemo.Shared;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Rurouni_v2.Models.DTO.Requests;

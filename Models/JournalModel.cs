@@ -9,7 +9,7 @@ namespace Rurouni_v2.Models
     public class JournalModel
     {
         [Key]
-        public int id { get; set; }
+        public int JournalId { get; set; }
 
         [Required(ErrorMessage = "Enter the date of workout")]
         [DataType(DataType.Date)]
