@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Rurouni_v2.Services;
 using Rurouni_v2.Models.DTO.Responses;
 using Rurouni_v2.Models.DTO.Requests;
+using Microsoft.AspNetCore.Http;
 
 namespace Rurouni_v2.Controllers
 {
@@ -58,12 +59,14 @@ namespace Rurouni_v2.Controllers
                 var result = await _userService.LoginUserAsync(model);
 
                 if (result.isSuccess)
-                    return Ok(result);
+                {
+                    HttpContext.Session.SetString("JWToken", result.Message);
+                }
 
-                return BadRequest(result);
+                return Redirect("~/Home/Index");
             }
 
-            return BadRequest("Invlaid payload");
+            return BadRequest("Invalid payload");
         }
     }
 }

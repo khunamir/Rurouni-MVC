@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,8 @@ namespace Rurouni_v2
                 };
             });
 
+            services.AddSession();
+
             services.AddScoped<IUserService, UserService>();
 
             services.AddControllersWithViews();
@@ -78,12 +81,30 @@ namespace Rurouni_v2
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
+
+            //Add JWToken to all incoming HTTP Request Header
+            app.Use(async (context, next) =>
+            {
+                var JWToken = context.Session.GetString("JWToken");
+                if (!string.IsNullOrEmpty(JWToken))
+                {
+                    context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
+                }
+                await next();
+            });
+
+            //Add JWToken Authentication service
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
