@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace Rurouni_v2.Controllers
 {
@@ -14,11 +16,13 @@ namespace Rurouni_v2.Controllers
     public class JournalController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private UserManager<IdentityUser> _userManager;
 
         // Dependancy injection
-        public JournalController(ApplicationDbContext db)
+        public JournalController(ApplicationDbContext db, UserManager<IdentityUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         // Get - Index
@@ -43,8 +47,14 @@ namespace Rurouni_v2.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var journals = from s in _db.Journals
-                           select s;
+            //var journals = from s in _db.Journals
+            //               select s;
+
+            var journals = from x in _db.Journals
+                           where x.UserId.Contains(HttpContext.Session.GetString("Id"))
+                           select x;
+            // todo - journal based on user
+            //      - log out
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -120,6 +130,8 @@ namespace Rurouni_v2.Controllers
                 return RedirectToAction("Index");
             }
 
+            // Add id for update
+
             return View(journal);
         }
 
@@ -144,7 +156,6 @@ namespace Rurouni_v2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-
             var journal = _db.Journals.Find(id);
 
             if (journal == null)

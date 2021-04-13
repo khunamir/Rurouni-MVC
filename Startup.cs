@@ -88,8 +88,6 @@ namespace Rurouni_v2
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseSession();
 
             //Add JWToken to all incoming HTTP Request Header
@@ -105,6 +103,8 @@ namespace Rurouni_v2
 
             //Add JWToken Authentication service
             app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

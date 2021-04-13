@@ -1,6 +1,6 @@
 ﻿@model Rurouni_v2.Models.JournalModel
 
-<form method="post" asp-action="DeletePost">
+<form method="post" asp-action="DeletePost" asp-route-Id="@Model.JournalId">
     <input asp-for="JournalId" hidden />
     <div class="border p-3">
         <div class="form-group row">
